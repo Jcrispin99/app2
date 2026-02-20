@@ -17,39 +17,30 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
 
-            // Relación con Producto (para facturación e inventario)
             $table->foreignId('product_product_id')
                 ->nullable()
                 ->constrained('product_products')
                 ->nullOnDelete();
 
-            // Información básica
             $table->string('name', 100);
             $table->text('description')->nullable();
-            $table->integer('duration_days'); // 30, 60, 90, 180, 365
+            $table->integer('duration_days');
             $table->decimal('price', 10, 2);
 
-            // Reglas de acceso
             $table->integer('max_entries_per_month')->nullable()->comment('NULL = ilimitado');
             $table->integer('max_entries_per_day')->default(1);
 
-            // Horarios permitidos
             $table->boolean('time_restricted')->default(false);
             $table->time('allowed_time_start')->nullable();
             $table->time('allowed_time_end')->nullable();
-
-            // Días permitidos (JSON array: ["monday", "tuesday", ...])
             $table->json('allowed_days')->nullable()->comment('NULL = todos los días');
 
-            // Configuración de congelamiento
             $table->boolean('allows_freezing')->default(false);
             $table->integer('max_freeze_days')->default(0)->comment('Días máximos de congelamiento en toda la vigencia');
 
-            // Estado
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            // Índices
             $table->index(['company_id', 'is_active']);
             $table->index('name');
         });

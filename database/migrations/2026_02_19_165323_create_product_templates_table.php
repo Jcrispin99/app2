@@ -19,11 +19,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2)->default(0.00);
 
-            // Relaciones
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreignId('uom_id')->nullable()->constrained('unit_of_measures')->nullOnDelete();
 
-            // Configuración
             $table->boolean('is_active')->default(true);
             $table->boolean('is_pos_visible')->default(true);
             $table->boolean('tracks_inventory')->default(true);
@@ -31,7 +29,6 @@ return new class extends Migration
 
             $table->timestamps();
 
-            // Índices
             $table->index(['is_pos_visible', 'tracks_inventory']);
             $table->index('is_service');
         });

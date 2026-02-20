@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('barcode')->nullable();
             $table->decimal('price', 10, 2)->nullable();
             $table->decimal('cost_price', 10, 2)->default(0)->comment('Último precio de compra');
-            // $table->integer('stock')->default(0);
             $table->boolean('is_principal')->default(false);
             $table->timestamps();
 

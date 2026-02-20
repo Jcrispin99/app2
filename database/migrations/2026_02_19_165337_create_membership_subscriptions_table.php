@@ -19,12 +19,10 @@ return new class extends Migration
             $table->foreignId('membership_plan_id')->constrained('membership_plans')->onDelete('restrict');
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
 
-            // Fechas de la suscripción
             $table->date('start_date');
             $table->date('end_date');
             $table->date('original_end_date')->comment('Fecha original antes de congelamientos');
 
-            // Pagos
             $table->decimal('amount_paid', 10, 2);
             $table->string('payment_method', 50)->nullable(); // efectivo, tarjeta, transferencia
             $table->string('payment_reference', 100)->nullable();

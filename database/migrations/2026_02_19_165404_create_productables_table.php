@@ -50,7 +50,6 @@ return new class extends Migration
 
             // morphs() ya crea su propio índice, solo agregamos index para product_product_id
             $table->index('product_product_id');
-
         });
     }
 
