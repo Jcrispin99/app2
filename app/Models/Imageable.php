@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 final class Imageable extends Model
 {
-    //
+    protected $fillable = ['path', 'size'];
+
+    public function imageable()
+    {
+        return $this->morphTo();
+    }
 }

@@ -65,12 +65,12 @@ final class ProductTemplate extends Model
 
     public function images(): MorphMany
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return $this->morphMany(Imageable::class, 'imageable');
     }
 
     public function mainImage(): MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->oldestOfMany();
+        return $this->morphOne(Imageable::class, 'imageable')->oldestOfMany();
     }
 
     public function image(): Attribute

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\AttributeController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompanyController;
+use App\Http\Controllers\Api\V1\ProductTemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,6 +41,9 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::apiResource('companies', CompanyController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('attributes', AttributeController::class);
+    
+    Route::patch('products/{product_template}/toggle-status', [ProductTemplateController::class, 'toggleStatus']);
+    Route::apiResource('products', ProductTemplateController::class);
 });
 
 // Password reset routes (public with rate limiting)

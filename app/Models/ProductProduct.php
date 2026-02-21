@@ -60,7 +60,7 @@ final class ProductProduct extends Model
 
     public function attributeValues(): BelongsToMany
     {
-        return $this->belongsToMany(AttributeValue::class, 'attribute_value_product_product', 'product_product_id');
+        return $this->belongsToMany(AttributeValue::class, 'attribute_value_products', 'product_product_id');
     }
 
     public function inventories()
