@@ -40,6 +40,17 @@ final class AttributeController extends Controller
         );
     }
 
+    public function formOptions(): JsonResponse
+    {
+        return $this->success([
+            'types' => [
+                ['id' => 'text', 'name' => 'Text'],
+                ['id' => 'color', 'name' => 'Color'],
+                ['id' => 'select', 'name' => 'Select'],
+            ],
+        ], 'Form options retrieved successfully');
+    }
+
     /**
      * Store a newly created resource in storage.
      */

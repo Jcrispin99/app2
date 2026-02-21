@@ -44,6 +44,18 @@ final class CategoryController extends Controller
         );
     }
 
+    public function formOptions(): JsonResponse
+    {
+        $categories = Category::query()
+            ->whereNull('parent_id')
+            ->orderBy('name')
+            ->get();
+
+        return $this->success([
+            'parent_categories' => CategoryResource::collection($categories),
+        ], 'Form options retrieved successfully');
+    }
+
     /**
      * Store a newly created resource in storage.
      */

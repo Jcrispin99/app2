@@ -44,6 +44,17 @@ final class ProductTemplateController extends Controller
         );
     }
 
+    public function formOptions(): JsonResponse
+    {
+        $categories = \App\Models\Category::query()->orderBy('name')->get();
+        $attributes = Attribute::withValues()->orderBy('name')->get();
+
+        return $this->success([
+            'categories' => \App\Http\Resources\CategoryResource::collection($categories),
+            'attributes' => \App\Http\Resources\AttributeResource::collection($attributes),
+        ], 'Form options retrieved successfully');
+    }
+
     public function store(ProductTemplateRequest $request): JsonResponse
     {
         $data = $request->validated();

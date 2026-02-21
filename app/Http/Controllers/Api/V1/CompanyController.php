@@ -45,6 +45,18 @@ final class CompanyController extends Controller
         );
     }
 
+    public function formOptions(): JsonResponse
+    {
+        $companies = Company::query()
+            ->mainOffices()
+            ->orderBy('business_name')
+            ->get();
+
+        return $this->success([
+            'parent_companies' => CompanyResource::collection($companies),
+        ], 'Form options retrieved successfully');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
