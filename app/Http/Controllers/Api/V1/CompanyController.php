@@ -9,16 +9,17 @@ use App\Http\Requests\Api\V1\CompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 final class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $perPage = request()->input('per_page', 15);
-        $search = request()->input('search');
+        $perPage = $request->input('per_page', 15);
+        $search = $request->input('search');
 
         $query = Company::query()->orderBy('id');
 

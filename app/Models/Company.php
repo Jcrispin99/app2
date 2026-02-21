@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 final class Company extends Model
 {
-    use LogsActivity;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'parent_id',
@@ -107,8 +108,8 @@ final class Company extends Model
                 'email',
                 'active',
             ])
-            ->logOnlyDirty()          // solo loguea campos que cambiaron
-            ->dontSubmitEmptyLogs()   // no guarda log si nada cambió
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
             ->setDescriptionForEvent(fn (string $eventName) => "Company {$eventName}");
     }
 

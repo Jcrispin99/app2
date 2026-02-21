@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\V1\AttributeController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompanyController;
@@ -35,8 +36,10 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
         ->middleware('throttle:6,1')
         ->name('verification.send');
 
+    // endpoinds
     Route::apiResource('companies', CompanyController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('attributes', AttributeController::class);
 });
 
 // Password reset routes (public with rate limiting)

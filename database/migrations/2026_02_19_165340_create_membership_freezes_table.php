@@ -17,23 +17,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('membership_subscription_id')->constrained('membership_subscriptions')->onDelete('cascade');
 
-            // Fechas del congelamiento
             $table->date('freeze_start_date');
             $table->date('freeze_end_date')->nullable()->comment('NULL mientras esté activo');
             $table->integer('days_frozen')->default(0);
             $table->integer('planned_days')->default(0);
 
-            // Información adicional
             $table->text('reason')->nullable();
             $table->foreignId('requested_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
 
-            // Estado del congelamiento
             $table->enum('status', ['active', 'completed', 'cancelled'])->default('active');
 
             $table->timestamps();
 
-            // Índices
             $table->index(['membership_subscription_id', 'status']);
             $table->index('freeze_start_date');
         });
@@ -44,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('membershipfreezes');
+        Schema::dropIfExists('membership_freezes');
     }
 };

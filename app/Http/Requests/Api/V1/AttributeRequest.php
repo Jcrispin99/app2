@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Requests\Api\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-final class CategoryRequest extends FormRequest
+final class AttributeRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -21,9 +20,9 @@ final class CategoryRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'parent_id' => ['nullable', 'integer', Rule::exists('categories', 'id')],
             'is_active' => ['boolean'],
+            'values' => ['nullable', 'array'],
+            'values.*' => ['required_with:values', 'string', 'max:255'],
         ];
 
         if ($this->isMethod('patch')) {
