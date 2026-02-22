@@ -80,7 +80,7 @@ final class MembershipPlan extends Model
 
     public function hasTimeRestriction(): bool
     {
-        return $this->time_restricted;
+        return (bool) $this->time_restricted;
     }
 
     public function hasDayRestriction(): bool
@@ -100,7 +100,7 @@ final class MembershipPlan extends Model
 
     public function getFormattedPrice(): string
     {
-        return 'S/ '.number_format($this->price, 2);
+        return 'S/ '.number_format((float) $this->price, 2);
     }
 
     protected static function booted()

@@ -7,10 +7,20 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompanyController;
 use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\JournalController;
+use App\Http\Controllers\Api\V1\MembershipPlanController;
+use App\Http\Controllers\Api\V1\MembershipSubscriptionController;
+use App\Http\Controllers\Api\V1\PaymentMethodController;
+use App\Http\Controllers\Api\V1\PosConfigController;
+use App\Http\Controllers\Api\V1\PosSessionController;
+use App\Http\Controllers\Api\V1\PosSessionPaymentController;
 use App\Http\Controllers\Api\V1\ProductTemplateController;
 use App\Http\Controllers\Api\V1\PurchaseController;
 use App\Http\Controllers\Api\V1\SaleController;
+use App\Http\Controllers\Api\V1\SubscriptionFreezeController;
 use App\Http\Controllers\Api\V1\SupplierController;
+use App\Http\Controllers\Api\V1\TaxController;
+use App\Http\Controllers\Api\V1\UnitOfMeasureController;
 use App\Http\Controllers\Api\V1\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +85,63 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::post('sales/{sale}/cancel', [SaleController::class, 'cancel']);
     Route::post('sales/{sale}/credit-note', [SaleController::class, 'createCreditNote']);
     Route::apiResource('sales', SaleController::class);
+
+    Route::get('journals/form-options', [JournalController::class, 'formOptions']);
+    Route::post('journals/{journal}/reset-sequence', [JournalController::class, 'resetSequence']);
+    Route::apiResource('journals', JournalController::class);
+
+    Route::get('taxes/form-options', [TaxController::class, 'formOptions']);
+    Route::patch('taxes/{tax}/toggle-status', [TaxController::class, 'toggleStatus']);
+    Route::apiResource('taxes', TaxController::class);
+
+    Route::get('unit-of-measures/form-options', [UnitOfMeasureController::class, 'formOptions']);
+    Route::patch('unit-of-measures/{unit_of_measure}/toggle-status', [UnitOfMeasureController::class, 'toggleStatus']);
+    Route::apiResource('unit-of-measures', UnitOfMeasureController::class);
+
+    Route::get('membership-plans/form-options', [MembershipPlanController::class, 'formOptions']);
+    Route::patch('membership-plans/{membership_plan}/toggle-status', [MembershipPlanController::class, 'toggleStatus']);
+    Route::apiResource('membership-plans', MembershipPlanController::class);
+
+    // Membership Subscriptions & Nested Freezes
+    Route::apiResource('membership-subscriptions', MembershipSubscriptionController::class)->except(['update', 'destroy']);
+
+    // Freeze Action Routes
+    Route::post('membership-subscriptions/{subscription}/freezes', [SubscriptionFreezeController::class, 'store']);
+    Route::patch('membership-freezes/{freeze}/complete', [SubscriptionFreezeController::class, 'complete']);
+    Route::patch('membership-freezes/{freeze}/cancel', [SubscriptionFreezeController::class, 'cancel']);
+    /*
+     * --------------------------------------------------------------------------
+     * Asistencias (Attendance - Check-in / Check-out Model)
+     * --------------------------------------------------------------------------
+     */
+    Route::get('attendances', [App\Http\Controllers\Api\V1\AttendanceController::class, 'index']);
+    Route::get('attendances/{attendance}', [App\Http\Controllers\Api\V1\AttendanceController::class, 'show']);
+    Route::post('attendances/check-in', [App\Http\Controllers\Api\V1\AttendanceController::class, 'checkIn']);
+    Route::patch('attendances/{attendance}/check-out', [App\Http\Controllers\Api\V1\AttendanceController::class, 'checkOut']);
+
+    /*
+     * --------------------------------------------------------------------------
+     * Punto de Venta (POS) - Foundations
+     * --------------------------------------------------------------------------
+     */
+    Route::patch('payment-methods/{payment_method}/toggle-status', [PaymentMethodController::class, 'toggleStatus']);
+    Route::apiResource('payment-methods', PaymentMethodController::class);
+
+    Route::patch('pos-configs/{pos_config}/toggle-status', [PosConfigController::class, 'toggleStatus']);
+    Route::apiResource('pos-configs', PosConfigController::class);
+
+    /*
+     * --------------------------------------------------------------------------
+     * Punto de Venta (POS) - Turnos
+     * --------------------------------------------------------------------------
+     */
+    Route::post('pos-sessions', [PosSessionController::class, 'open']);
+    Route::patch('pos-sessions/{pos_session}/close', [PosSessionController::class, 'close']);
+    Route::get('pos-sessions', [PosSessionController::class, 'index']);
+    Route::get('pos-sessions/{pos_session}', [PosSessionController::class, 'show']);
+
+    Route::get('pos-session-payments', [PosSessionPaymentController::class, 'index']);
+
 });
 
 // Password reset routes (public with rate limiting)

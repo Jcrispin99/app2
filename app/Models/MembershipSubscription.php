@@ -156,7 +156,7 @@ final class MembershipSubscription extends Model
             return 0;
         }
 
-        return now()->diffInDays($this->end_date, false);
+        return (int) now()->diffInDays($this->end_date, false);
     }
 
     public function getProgress(): float

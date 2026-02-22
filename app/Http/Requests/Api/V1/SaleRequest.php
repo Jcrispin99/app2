@@ -46,6 +46,12 @@ final class SaleRequest extends FormRequest
             'products.*.uom_id' => ['nullable', 'integer', 'exists:unit_of_measures,id'],
             'products.*.quantity_uom' => ['nullable', 'numeric', 'min:0.01'],
             'products.*.price_uom' => ['nullable', 'numeric', 'min:0'],
+            
+            // Integración Parcial POS (Pagos Mixtos y Turno)
+            'pos_session_id' => ['nullable', 'integer', 'exists:pos_sessions,id'],
+            'payments' => ['sometimes', 'array'],
+            'payments.*.payment_method_id' => ['required_with:payments', 'integer', 'exists:payment_methods,id'],
+            'payments.*.amount' => ['required_with:payments', 'numeric', 'min:0'],
         ];
 
         // Specific legacy lines handling

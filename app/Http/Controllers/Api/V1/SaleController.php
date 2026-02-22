@@ -9,12 +9,13 @@ use App\Http\Requests\Api\V1\SaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\Journal;
 use App\Models\Partner;
+use App\Models\PosSession;
+use App\Models\PosSessionPayment;
 use App\Models\Sale;
 use App\Models\Tax;
 use App\Models\UnitOfMeasure;
 use App\Models\Warehouse;
 use App\Services\KardexService;
-use App\Services\SequenceService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -168,28 +169,47 @@ final class SaleController extends Controller
         }
 
         DB::transaction(function () use ($validated, &$saleId, $companyId) {
-            $defaultJournal = Journal::where('type', 'sale')
-                ->where('company_id', $companyId)
-                ->first();
+            $defaultJournal = null;
+
+            if (!empty($validated['pos_session_id'])) {
+                // Find Session > Config > Default Journal
+                $posSession = PosSession::with('posConfig.journals')->find($validated['pos_session_id']);
+                if ($posSession && $posSession->posConfig) {
+                    // Try to retrieve the 'is_default' journal from pivot, or fallback to first one
+                    $defaultJournal = $posSession->posConfig->journals()
+                        ->wherePivot('is_default', true)
+                        ->first() ?? $posSession->posConfig->journals->first();
+                }
+            }
+
+            if (!$defaultJournal) {
+                // Standard Sale Journal Lookup
+                $defaultJournal = Journal::where('type', 'sale')
+                    ->where('company_id', $companyId)
+                    ->first();
+            }
 
             if (! $defaultJournal) {
                 throw ValidationException::withMessages([
-                    'journal' => 'No se encontró un diario de ventas para esta compañía. Por favor crea uno primero.',
+                    'journal' => 'No se encontró un diario de ventas disponible (ni global, ni asignado a la Caja).',
                 ]);
             }
 
             $serie = 'B001';
             $correlative = '0000001';
 
-            if (class_exists(SequenceService::class)) {
-                $numberParts = SequenceService::getNextParts($defaultJournal->id);
-                $serie = $numberParts['serie'];
-                $correlative = $numberParts['correlative'];
+            if ($defaultJournal->sequence) {
+                $serie = $defaultJournal->code;
+                $correlative = str_pad((string) $defaultJournal->sequence->next_number, $defaultJournal->sequence->sequence_size, '0', STR_PAD_LEFT);
+                
+                // Consumir permanentemente el número (avanzar +1)
+                $defaultJournal->sequence->increment('next_number', $defaultJournal->sequence->step);
             }
 
             $sale = Sale::create([
                 'partner_id' => $validated['partner_id'] ?? null,
                 'warehouse_id' => $validated['warehouse_id'],
+                'pos_session_id' => $validated['pos_session_id'] ?? null,
                 'journal_id' => $defaultJournal->id,
                 'company_id' => $companyId,
                 'notes' => $validated['notes'] ?? null,
@@ -245,6 +265,21 @@ final class SaleController extends Controller
                 'total' => $subtotal + $totalTax,
             ]);
             $saleId = $sale->id;
+
+            // Log Partial POS Payments if requested via POS
+            if (!empty($validated['pos_session_id']) && !empty($validated['payments'])) {
+                foreach ($validated['payments'] as $payment) {
+                    PosSessionPayment::create([
+                        'pos_session_id' => $validated['pos_session_id'],
+                        'sale_id' => $sale->id,
+                        'payment_method_id' => $payment['payment_method_id'],
+                        'amount' => $payment['amount'],
+                    ]);
+                }
+                
+                // If POS sets the payment immediately
+                $sale->update(['payment_status' => 'paid']);
+            }
         });
 
         $sale = Sale::query()
@@ -448,13 +483,13 @@ final class SaleController extends Controller
                 ]);
             }
 
-            $serie = clone $creditJournal->serie ?? 'FC01';
-            $correlative = clone $creditJournal->correlative ?? '0000001';
+            $serie = 'FC01';
+            $correlative = '0000001';
 
-            if (class_exists(SequenceService::class)) {
-                $numberParts = SequenceService::getNextParts($creditJournal->id);
-                $serie = $numberParts['serie'];
-                $correlative = $numberParts['correlative'];
+            if ($creditJournal->sequence) {
+                $serie = $creditJournal->code;
+                $correlative = str_pad((string) $creditJournal->sequence->next_number, $creditJournal->sequence->sequence_size, '0', STR_PAD_LEFT);
+                $creditJournal->sequence->increment('next_number', $creditJournal->sequence->step);
             }
 
             $creditSale = Sale::create([

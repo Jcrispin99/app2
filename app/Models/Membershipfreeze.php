@@ -14,6 +14,8 @@ final class Membershipfreeze extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected $table = 'membership_freezes';
+
     protected $fillable = [
         'membership_subscription_id',
         'freeze_start_date',

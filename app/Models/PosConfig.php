@@ -54,7 +54,7 @@ final class PosConfig extends Model
 
     public function journals(): BelongsToMany
     {
-        return $this->belongsToMany(Journal::class, 'journal_pos_config')
+        return $this->belongsToMany(Journal::class, 'journal_pos_configs')
             ->withPivot(['document_type', 'is_default'])
             ->withTimestamps();
     }
