@@ -151,3 +151,6 @@ Route::middleware('throttle:6,1')->group(function (): void {
     Route::post('reset-password', [AuthController::class, 'resetPassword'])
         ->name('password.reset');
 });
+Route::get('members/form-options', [App\Http\Controllers\Api\V1\MemberController::class, 'formOptions']);
+Route::post('members/{member}/activate-portal', [App\Http\Controllers\Api\V1\MemberController::class, 'activatePortal']);
+Route::apiResource('members', App\Http\Controllers\Api\V1\MemberController::class);
