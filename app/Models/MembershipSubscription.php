@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class MembershipSubscription extends Model
 {
+    use SoftDeletes;
     use HasFactory, SoftDeletes;
 
     protected $fillable = [

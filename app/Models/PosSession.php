@@ -6,12 +6,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 final class PosSession extends Model
 {
+    use SoftDeletes;
     use HasFactory, LogsActivity;
 
     public const STATUS_OPENING_CONTROL = 'opening_control';

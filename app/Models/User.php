@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +25,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 final class User extends Authenticatable implements MustVerifyEmail
 {
+    use SoftDeletes;
     use HasApiTokens;
 
     /** @use HasFactory<UserFactory> */

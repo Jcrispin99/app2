@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
@@ -12,6 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 final class UnitOfMeasure extends Model
 {
+    use SoftDeletes;
     use LogsActivity;
 
     protected $table = 'unit_of_measures';
