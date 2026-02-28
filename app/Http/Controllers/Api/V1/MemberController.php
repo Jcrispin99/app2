@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Spatie\Activitylog\Models\Activity;
 
-class MemberController extends Controller
+final class MemberController extends Controller
 {
     /**
      * Display a listing of members.
@@ -39,7 +39,7 @@ class MemberController extends Controller
             ->latest('id');
 
         if (! empty($validated['search'])) {
-            $search = trim($validated['search']);
+            $search = mb_trim($validated['search']);
             $query->where(function ($q) use ($search) {
                 // Now using strictly DB tracked columns
                 $q->where('name', 'like', "%{$search}%")
@@ -220,5 +220,17 @@ class MemberController extends Controller
                 'companies' => $companies,
             ],
         ]);
+    }
+
+    /**
+     * Toggle the active status of the resource.
+     */
+    public function toggleStatus(Partner $member): JsonResponse
+    {
+        $member->update([
+            'status' => $member->status === 'active' ? 'inactive' : 'active',
+        ]);
+
+        return $this->success(new MemberResource($member->fresh()->load('company')));
     }
 }

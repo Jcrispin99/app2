@@ -151,18 +151,12 @@ class PosConfigController extends Controller
         ]);
     }
 
-    /**
-     * Toggle the status of the POS Config.
-     */
     public function toggleStatus(PosConfig $posConfig): JsonResponse
     {
-        $posConfig->update(['is_active' => ! $posConfig->is_active]);
-
-        $status = $posConfig->is_active ? 'activada' : 'desactivada';
-
-        return response()->json([
-            'message' => "Terminal POS {$status} exitosamente.",
-            'data' => new PosConfigResource($posConfig->loadMissing(['warehouse', 'tax'])),
+        $posConfig->update([
+            'is_active' => ! $posConfig->is_active,
         ]);
+
+        return $this->success(new PosConfigResource($posConfig->fresh()->loadMissing(['warehouse', 'tax'])));
     }
 }

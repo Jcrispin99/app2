@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompanyController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\JournalController;
+use App\Http\Controllers\Api\V1\MemberController;
 use App\Http\Controllers\Api\V1\MembershipPlanController;
 use App\Http\Controllers\Api\V1\MembershipSubscriptionController;
 use App\Http\Controllers\Api\V1\PaymentMethodController;
@@ -45,7 +46,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('me', [AuthController::class, 'me'])->name('api.v1.me');
 
     // Global Search
-    Route::get('search', [\App\Http\Controllers\Api\V1\GlobalSearchController::class, 'search'])->name('api.v1.search');
+    Route::get('search', [App\Http\Controllers\Api\V1\GlobalSearchController::class, 'search'])->name('api.v1.search');
 
     // Email verification
     Route::post('email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
@@ -96,6 +97,11 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('journals/form-options', [JournalController::class, 'formOptions']);
     Route::post('journals/{journal}/reset-sequence', [JournalController::class, 'resetSequence']);
     Route::apiResource('journals', JournalController::class);
+
+    Route::patch('members/{member}/toggle-status', [MemberController::class, 'toggleStatus']);
+    Route::get('members/form-options', [MemberController::class, 'formOptions']);
+    Route::post('members/{member}/activate-portal', [MemberController::class, 'activatePortal']);
+    Route::apiResource('members', MemberController::class);
 
     Route::get('taxes/form-options', [TaxController::class, 'formOptions']);
     Route::patch('taxes/{tax}/toggle-status', [TaxController::class, 'toggleStatus']);
@@ -158,6 +164,3 @@ Route::middleware('throttle:6,1')->group(function (): void {
     Route::post('reset-password', [AuthController::class, 'resetPassword'])
         ->name('password.reset');
 });
-Route::get('members/form-options', [App\Http\Controllers\Api\V1\MemberController::class, 'formOptions']);
-Route::post('members/{member}/activate-portal', [App\Http\Controllers\Api\V1\MemberController::class, 'activatePortal']);
-Route::apiResource('members', App\Http\Controllers\Api\V1\MemberController::class);

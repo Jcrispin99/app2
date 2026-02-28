@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class PaymentMethodController extends Controller
+final class PaymentMethodController extends Controller
 {
     /**
      * Display a paginated listing of Payment Methods.
@@ -47,7 +47,7 @@ class PaymentMethodController extends Controller
     public function store(PaymentMethodRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        
+
         $paymentMethod = PaymentMethod::create($validated);
 
         return response()->json([
@@ -70,7 +70,7 @@ class PaymentMethodController extends Controller
     public function update(PaymentMethodRequest $request, PaymentMethod $paymentMethod): JsonResponse
     {
         $validated = $request->validated();
-        
+
         $paymentMethod->update($validated);
 
         return response()->json([
@@ -93,18 +93,12 @@ class PaymentMethodController extends Controller
         ]);
     }
 
-    /**
-     * Toggle the status of the Payment Method.
-     */
     public function toggleStatus(PaymentMethod $paymentMethod): JsonResponse
     {
-        $paymentMethod->update(['is_active' => ! $paymentMethod->is_active]);
-
-        $status = $paymentMethod->is_active ? 'activado' : 'desactivado';
-
-        return response()->json([
-            'message' => "Método de pago {$status} exitosamente.",
-            'data' => new PaymentMethodResource($paymentMethod),
+        $paymentMethod->update([
+            'is_active' => ! $paymentMethod->is_active,
         ]);
+
+        return $this->success(new PaymentMethodResource($paymentMethod->fresh()));
     }
 }

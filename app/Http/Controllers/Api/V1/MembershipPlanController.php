@@ -137,9 +137,6 @@ final class MembershipPlanController extends Controller
             'is_active' => ! $membershipPlan->is_active,
         ]);
 
-        return response()->json([
-            'message' => 'Estado actualizado exitosamente.',
-            'data' => new MembershipPlanResource($membershipPlan->refresh()->load('company')),
-        ]);
+        return $this->success(new MembershipPlanResource($membershipPlan->fresh()->load('company')));
     }
 }
