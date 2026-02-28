@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
         ->name('verification.send');
 
     // endpoinds
+    Route::patch('companies/{company}/toggle-status', [CompanyController::class, 'toggleStatus']);
     Route::get('companies/form-options', [CompanyController::class, 'formOptions']);
     Route::apiResource('companies', CompanyController::class);
 
@@ -74,6 +75,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('warehouses/form-options', [WarehouseController::class, 'formOptions']);
     Route::apiResource('warehouses', WarehouseController::class);
 
+    Route::patch('customers/{customer}/toggle-status', [CustomerController::class, 'toggleStatus']);
     Route::get('customers/form-options', [CustomerController::class, 'formOptions']);
     Route::apiResource('customers', CustomerController::class);
 

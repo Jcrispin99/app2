@@ -183,4 +183,20 @@ final class CustomerController extends Controller
 
         return $this->noContent();
     }
+
+    /**
+     * Toggle the active status of the resource.
+     */
+    public function toggleStatus(Partner $customer): JsonResponse
+    {
+        if (! $customer->is_customer) {
+            return $this->error('Este registro no es un cliente.', 404);
+        }
+
+        $customer->update([
+            'status' => $customer->status === 'active' ? 'inactive' : 'active',
+        ]);
+
+        return $this->success(new CustomerResource($customer->fresh()->load(['company', 'user'])));
+    }
 }

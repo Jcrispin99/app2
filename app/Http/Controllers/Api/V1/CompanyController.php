@@ -91,4 +91,16 @@ final class CompanyController extends Controller
 
         return $this->noContent();
     }
+
+    /**
+     * Toggle the active status of the resource.
+     */
+    public function toggleStatus(Company $company): JsonResponse
+    {
+        $company->update([
+            'active' => ! $company->active,
+        ]);
+
+        return $this->success(new CompanyResource($company));
+    }
 }
