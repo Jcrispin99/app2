@@ -17,11 +17,21 @@ final class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Aseguramos el orden correcto de dependencias
+        $this->call([
+            CompanySeeder::class,
+            WarehouseSeeder::class,
+            UserSeeder::class,
+            CategorySeeder::class,
+            AttributeSeeder::class,
+            UnitOfMeasureSeeder::class,
+            TaxSeeder::class,
+            PartnerSeeder::class,
+            ProductSeeder::class,
+            MembershipPlanSeeder::class,
+            JournalSeeder::class,
+            PaymentMethodSeeder::class,
+            PosConfigSeeder::class,
         ]);
     }
 }
