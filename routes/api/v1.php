@@ -44,6 +44,9 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::post('logout', [AuthController::class, 'logout'])->name('api.v1.logout');
     Route::get('me', [AuthController::class, 'me'])->name('api.v1.me');
 
+    // Global Search
+    Route::get('search', [\App\Http\Controllers\Api\V1\GlobalSearchController::class, 'search'])->name('api.v1.search');
+
     // Email verification
     Route::post('email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
         ->middleware('signed')
