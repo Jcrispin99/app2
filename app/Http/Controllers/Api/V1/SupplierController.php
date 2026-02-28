@@ -164,4 +164,17 @@ final class SupplierController extends Controller
 
         return $this->noContent();
     }
+
+    public function toggleStatus(Partner $supplier): JsonResponse
+    {
+        if (! $supplier->is_supplier) {
+            return $this->error('Este registro no es un proveedor.', 404);
+        }
+
+        $supplier->update([
+            'status' => $supplier->status === 'active' ? 'inactive' : 'active',
+        ]);
+
+        return $this->success(new SupplierResource($supplier->fresh()->load('company')));
+    }
 }

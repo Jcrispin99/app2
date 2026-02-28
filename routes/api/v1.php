@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::apiResource('products', ProductTemplateController::class);
 
     Route::get('warehouses/form-options', [WarehouseController::class, 'formOptions']);
+    Route::patch('warehouses/{warehouse}/toggle-status', [WarehouseController::class, 'toggleStatus']);
     Route::apiResource('warehouses', WarehouseController::class);
 
     Route::patch('customers/{customer}/toggle-status', [CustomerController::class, 'toggleStatus']);
@@ -81,16 +82,17 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::apiResource('customers', CustomerController::class);
 
     Route::get('suppliers/form-options', [SupplierController::class, 'formOptions']);
+    Route::patch('suppliers/{supplier}/toggle-status', [SupplierController::class, 'toggleStatus']);
     Route::apiResource('suppliers', SupplierController::class);
 
     Route::get('purchases/form-options', [PurchaseController::class, 'formOptions']);
-    Route::post('purchases/{purchase}/post', [PurchaseController::class, 'post']);
-    Route::post('purchases/{purchase}/cancel', [PurchaseController::class, 'cancel']);
+    Route::patch('purchases/{purchase}/post', [PurchaseController::class, 'post']);
+    Route::patch('purchases/{purchase}/cancel', [PurchaseController::class, 'cancel']);
     Route::apiResource('purchases', PurchaseController::class);
 
     Route::get('sales/form-options', [SaleController::class, 'formOptions']);
-    Route::post('sales/{sale}/post', [SaleController::class, 'post']);
-    Route::post('sales/{sale}/cancel', [SaleController::class, 'cancel']);
+    Route::patch('sales/{sale}/post', [SaleController::class, 'post']);
+    Route::patch('sales/{sale}/cancel', [SaleController::class, 'cancel']);
     Route::post('sales/{sale}/credit-note', [SaleController::class, 'createCreditNote']);
     Route::apiResource('sales', SaleController::class);
 

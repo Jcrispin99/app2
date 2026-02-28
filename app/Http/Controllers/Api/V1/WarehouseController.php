@@ -70,4 +70,12 @@ final class WarehouseController extends Controller
 
         return $this->noContent();
     }
+    public function toggleStatus(Warehouse $warehouse): JsonResponse
+    {
+        $warehouse->update([
+            'is_active' => ! $warehouse->is_active,
+        ]);
+
+        return $this->success(new WarehouseResource($warehouse->fresh()->load('company')));
+    }
 }

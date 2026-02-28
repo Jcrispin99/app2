@@ -195,9 +195,6 @@ final class UnitOfMeasureController extends Controller
             'is_active' => ! $unitOfMeasure->is_active,
         ]);
 
-        return response()->json([
-            'message' => 'Estado actualizado exitosamente.',
-            'data' => new UnitOfMeasureResource($unitOfMeasure->load('baseUnit')),
-        ]);
+        return $this->success(new UnitOfMeasureResource($unitOfMeasure->fresh()->load('baseUnit')));
     }
 }

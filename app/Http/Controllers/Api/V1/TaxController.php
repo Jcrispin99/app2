@@ -155,9 +155,6 @@ final class TaxController extends Controller
             'is_active' => ! $tax->is_active,
         ]);
 
-        return response()->json([
-            'message' => 'Estado actualizado exitosamente.',
-            'is_active' => $tax->is_active,
-        ]);
+        return $this->success(new TaxResource($tax->fresh()));
     }
 }
