@@ -93,4 +93,16 @@ final class CategoryController extends Controller
 
         return $this->noContent();
     }
+
+    /**
+     * Toggle the active status of the resource.
+     */
+    public function toggleStatus(Category $category): JsonResponse
+    {
+        $category->update([
+            'is_active' => !$category->is_active,
+        ]);
+
+        return $this->success(new CategoryResource($category));
+    }
 }

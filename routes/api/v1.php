@@ -59,9 +59,11 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('companies/form-options', [CompanyController::class, 'formOptions']);
     Route::apiResource('companies', CompanyController::class);
 
+    Route::patch('categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus']);
     Route::get('categories/form-options', [CategoryController::class, 'formOptions']);
     Route::apiResource('categories', CategoryController::class);
 
+    Route::patch('attributes/{attribute}/toggle-status', [AttributeController::class, 'toggleStatus']);
     Route::get('attributes/form-options', [AttributeController::class, 'formOptions']);
     Route::apiResource('attributes', AttributeController::class);
 

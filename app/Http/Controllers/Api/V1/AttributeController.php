@@ -133,4 +133,16 @@ final class AttributeController extends Controller
 
         return $this->noContent();
     }
+
+    /**
+     * Toggle the active status of the resource.
+     */
+    public function toggleStatus(Attribute $attribute): JsonResponse
+    {
+        $attribute->update([
+            'is_active' => !$attribute->is_active,
+        ]);
+
+        return $this->success(new AttributeResource($attribute));
+    }
 }

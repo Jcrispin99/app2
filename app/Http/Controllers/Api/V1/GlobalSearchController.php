@@ -37,9 +37,8 @@ final class GlobalSearchController extends Controller
                 
             'products' => ProductTemplate::query()
                 ->where('name', 'like', "%{$term}%")
-                ->orWhere('default_code', 'like', "%{$term}%")
                 ->limit(5)
-                ->get(['id', 'name', 'default_code', 'list_price']),
+                ->get(['id', 'name', 'price']),
                 
             'partners' => Partner::query()
                 ->where('name', 'like', "%{$term}%")
