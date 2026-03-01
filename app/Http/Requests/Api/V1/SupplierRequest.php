@@ -32,7 +32,7 @@ final class SupplierRequest extends FormRequest
                     ->ignore($supplierId)
                     ->where(fn($q) => $q->where('document_type', $this->input('document_type'))),
             ],
-            'name' => ['nullable', 'string', 'max:200'],
+            'name' => ['required', 'string', 'max:200'],
             'business_name' => ['nullable', 'string', 'max:200'],
             'first_name' => ['nullable', 'string', 'max:100'],
             'last_name' => ['nullable', 'string', 'max:100'],

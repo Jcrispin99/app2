@@ -121,10 +121,6 @@ final class Partner extends Model
 
     public function getDisplayNameAttribute(): string
     {
-        if ($this->business_name) {
-            return $this->business_name;
-        }
-
         if ($this->name) {
             return $this->name;
         }
