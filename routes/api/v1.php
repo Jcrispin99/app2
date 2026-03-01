@@ -94,6 +94,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('sales/form-options', [SaleController::class, 'formOptions']);
     Route::patch('sales/{sale}/post', [SaleController::class, 'post']);
     Route::patch('sales/{sale}/cancel', [SaleController::class, 'cancel']);
+    Route::patch('sales/{sale}/pay', [SaleController::class, 'pay']);
     Route::post('sales/{sale}/credit-note', [SaleController::class, 'createCreditNote']);
     Route::apiResource('sales', SaleController::class);
 

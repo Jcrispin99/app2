@@ -213,7 +213,7 @@ final class SaleController extends Controller
             if ($defaultJournal->sequence) {
                 $serie = $defaultJournal->code;
                 $correlative = str_pad((string) $defaultJournal->sequence->next_number, $defaultJournal->sequence->sequence_size, '0', STR_PAD_LEFT);
-                
+
                 // Consumir permanentemente el número (avanzar +1)
                 $defaultJournal->sequence->increment('next_number', $defaultJournal->sequence->step);
             }
@@ -288,7 +288,7 @@ final class SaleController extends Controller
                         'amount' => $payment['amount'],
                     ]);
                 }
-                
+
                 // If POS sets the payment immediately
                 $sale->update(['payment_status' => 'paid']);
             }
@@ -476,6 +476,31 @@ final class SaleController extends Controller
     }
 
     /**
+     * Pagar Venta
+     */
+    public function pay(Sale $sale): JsonResponse
+    {
+        if ($sale->status !== 'posted') {
+            return $this->error('Solo se pueden pagar ventas publicadas.', 422);
+        }
+
+        if ($sale->payment_status === 'paid') {
+            return $this->error('La venta ya está pagada.', 422);
+        }
+
+        DB::transaction(function () use ($sale) {
+            $sale->update(['payment_status' => 'paid']);
+
+            activity()
+                ->performedOn($sale)
+                ->causedBy(request()->user())
+                ->log('Venta Pagada');
+        });
+
+        return $this->success(new SaleResource($sale->fresh()->load(self::SALE_LOAD_RELATIONS)));
+    }
+
+    /**
      * Crear Nota de Crédito
      */
     public function createCreditNote(Sale $sale): JsonResponse
@@ -526,7 +551,7 @@ final class SaleController extends Controller
                 'company_id' => $sale->company_id,
                 'original_sale_id' => $sale->id,
                 'user_id' => request()->user()?->id,
-                'notes' => 'Nota de Crédito generada a partir de '.$sale->serie.'-'.$sale->correlative,
+                'notes' => 'Nota de Crédito generada a partir de ' . $sale->serie . '-' . $sale->correlative,
                 'status' => 'draft',
                 'payment_status' => 'paid',
                 'serie' => $serie,
