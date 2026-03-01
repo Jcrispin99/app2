@@ -71,7 +71,7 @@ final class Company extends Model
 
     public function scopeMainOffices($query)
     {
-        return $query->whereNull('parent_id')->orWhere('is_main_office', true);
+        return $query->whereNull('parent_id')->orWhere('is_main', true);
     }
 
     public function scopeBranches($query)
@@ -86,7 +86,7 @@ final class Company extends Model
 
     public function isMainOffice(): bool
     {
-        return is_null($this->parent_id) || $this->is_main_office;
+        return is_null($this->parent_id) || $this->is_main;
     }
 
     public function getAllBranches()
@@ -112,7 +112,7 @@ final class Company extends Model
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Company {$eventName}");
+            ->setDescriptionForEvent(fn(string $eventName) => "Company {$eventName}");
     }
 
     protected function casts(): array
