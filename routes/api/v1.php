@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\SubscriptionFreezeController;
 use App\Http\Controllers\Api\V1\SupplierController;
 use App\Http\Controllers\Api\V1\TaxController;
 use App\Http\Controllers\Api\V1\UnitOfMeasureController;
+use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,9 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 
     // Global Search
     Route::get('search', [App\Http\Controllers\Api\V1\GlobalSearchController::class, 'search'])->name('api.v1.search');
+
+    // Users CRUD
+    Route::apiResource('users', UserController::class);
 
     // Email verification
     Route::post('email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
