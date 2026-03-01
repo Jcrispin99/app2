@@ -46,25 +46,25 @@ final class SupplierController extends Controller
         }
 
         $paginator = $query->paginate((int) $perPage)->appends($request->query());
-        $countsQuery = clone $query;
+
+        $baseCount = clone $query;
 
         return response()->json([
             'success' => true,
             'message' => 'Suppliers retrieved successfully.',
-            'data' => SupplierResource::collection($paginator->items()),
-            'links' => $paginator->linkCollection(),
-            'meta' => [
-                'current_page' => $paginator->currentPage(),
-                'last_page' => $paginator->lastPage(),
-                'per_page' => $paginator->perPage(),
-                'total' => $paginator->total(),
-                'from' => $paginator->firstItem(),
-                'to' => $paginator->lastItem(),
-                // Custom supplier counts based on status
-                'active_count' => clone $countsQuery->where('status', 'active')->count(),
-                'inactive_count' => clone $countsQuery->where('status', 'inactive')->count(),
-                'suspended_count' => clone $countsQuery->where('status', 'suspended')->count(),
-                'blacklisted_count' => clone $countsQuery->where('status', 'blacklisted')->count(),
+            'data'    => SupplierResource::collection($paginator->items()),
+            'links'   => $paginator->linkCollection(),
+            'meta'    => [
+                'current_page'      => $paginator->currentPage(),
+                'last_page'         => $paginator->lastPage(),
+                'per_page'          => $paginator->perPage(),
+                'total'             => $paginator->total(),
+                'from'              => $paginator->firstItem(),
+                'to'                => $paginator->lastItem(),
+                'active_count'      => (clone $baseCount)->where('status', 'active')->count(),
+                'inactive_count'    => (clone $baseCount)->where('status', 'inactive')->count(),
+                'suspended_count'   => (clone $baseCount)->where('status', 'suspended')->count(),
+                'blacklisted_count' => (clone $baseCount)->where('status', 'blacklisted')->count(),
             ],
         ]);
     }
