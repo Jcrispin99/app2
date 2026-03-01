@@ -34,6 +34,7 @@ final class ProductTemplateResource extends JsonResource
             'barcode' => $this->barcode,
 
             // Reaciones
+            'category_id' => $this->category_id,
             'category' => new CategoryResource($this->whenLoaded('category')),
             // 'uom' => new UnitOfMeasureResource($this->whenLoaded('uom')), // (To implement later)
             'variants' => ProductProductResource::collection($this->whenLoaded('productProducts')),

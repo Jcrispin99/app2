@@ -82,7 +82,6 @@ final class ProductTemplateController extends Controller
             ]);
 
             $this->handleImages($request, $productTemplate);
-            $this->handleAttributes($data);
 
             $createdVariantIds = [];
 
@@ -121,6 +120,9 @@ final class ProductTemplateController extends Controller
                     'is_principal' => true,
                 ]);
             }
+
+            // Asociar atributos a la variante principal DESPUÉS de crearla
+            $this->handleAttributes($data, $productTemplate);
 
             return $productTemplate;
         });
@@ -175,7 +177,7 @@ final class ProductTemplateController extends Controller
             ]);
 
             $this->handleImagesUpdate($request, $product);
-            $this->handleAttributes($data);
+            $this->handleAttributes($data, $product);
 
             if (! empty($data['generatedVariants'])) {
                 $this->syncVariantsBySignature($data['generatedVariants'], $product);
@@ -333,11 +335,18 @@ final class ProductTemplateController extends Controller
         }
     }
 
-    private function handleAttributes(array $data): void
+    private function handleAttributes(array $data, ProductTemplate $productTemplate): void
     {
         if (empty($data['attributeLines']) || ! is_array($data['attributeLines'])) {
             return;
         }
+
+        $principalVariant = $productTemplate->productProducts()
+            ->where('is_principal', true)
+            ->first()
+            ?? $productTemplate->productProducts()->first();
+
+        $attributeValueIds = [];
 
         foreach ($data['attributeLines'] as $line) {
             if (empty($line['attribute_id']) || empty($line['values']) || ! is_array($line['values'])) {
@@ -355,11 +364,18 @@ final class ProductTemplateController extends Controller
                     continue;
                 }
 
-                AttributeValue::firstOrCreate([
+                $attributeValue = AttributeValue::firstOrCreate([
                     'attribute_id' => $attribute->id,
-                    'value' => $valueName,
+                    'value'        => $valueName,
                 ]);
+
+                $attributeValueIds[] = $attributeValue->id;
             }
+        }
+
+        // Asociar todos los valores a la variante principal
+        if ($principalVariant && ! empty($attributeValueIds)) {
+            $principalVariant->attributeValues()->syncWithoutDetaching($attributeValueIds);
         }
     }
 
