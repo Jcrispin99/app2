@@ -72,6 +72,11 @@ final class UnitOfMeasure extends Model
         return $this->hasMany(Productable::class, 'uom_id');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function isBase(): bool
     {
         return $this->base_unit_id === null;
