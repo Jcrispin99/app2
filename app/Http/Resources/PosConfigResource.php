@@ -23,6 +23,7 @@ final class PosConfigResource extends JsonResource
             'name' => $this->name,
 
             // Boolean Configurations
+            'has_active_session' => (bool) ($this->has_active_session ?? false),
             'apply_tax' => (bool) $this->apply_tax,
             'prices_include_tax' => (bool) $this->prices_include_tax,
             'is_active' => (bool) $this->is_active,

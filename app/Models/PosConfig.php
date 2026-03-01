@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -59,6 +60,11 @@ final class PosConfig extends Model
         return $this->belongsToMany(Journal::class, 'journal_pos_configs')
             ->withPivot(['document_type', 'is_default'])
             ->withTimestamps();
+    }
+
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(PosSession::class);
     }
 
     public function getJournalsForType(string $documentType)

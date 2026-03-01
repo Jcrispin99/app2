@@ -28,6 +28,9 @@ final class PosConfigController extends Controller
 
         $query = PosConfig::query()
             ->with(['warehouse', 'tax']) // Shallow relations for grid
+            ->withExists(['sessions as has_active_session' => function ($q) {
+                $q->whereIn('status', ['opened', 'opening_control', 'closing_control']);
+            }])
             ->orderBy('id', 'desc');
 
         if (! empty($validated['q'])) {
