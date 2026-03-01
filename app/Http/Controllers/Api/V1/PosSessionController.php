@@ -101,7 +101,7 @@ final class PosSessionController extends Controller
      */
     public function show(PosSession $posSession): PosSessionResource
     {
-        return new PosSessionResource($posSession->load(['posConfig', 'payments.paymentMethod']));
+        return new PosSessionResource($posSession->load(['posConfig.warehouse', 'payments.paymentMethod']));
     }
 
     /**

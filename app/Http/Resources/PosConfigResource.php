@@ -19,6 +19,7 @@ final class PosConfigResource extends JsonResource
         return [
             'id' => $this->id,
             'company_id' => $this->company_id,
+            'warehouse_id' => $this->warehouse_id,
             'name' => $this->name,
 
             // Boolean Configurations
