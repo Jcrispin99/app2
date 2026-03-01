@@ -138,50 +138,50 @@ final class ProductTemplateController extends Controller
     /**
      * Ver Producto
      */
-    public function show(ProductTemplate $productTemplate): JsonResponse
+    public function show(ProductTemplate $product): JsonResponse
     {
-        $productTemplate->load([
+        $product->load([
             'category',
             'images',
             'mainImage',
             'productProducts.attributeValues.attribute',
         ]);
 
-        return $this->success(new ProductTemplateResource($productTemplate));
+        return $this->success(new ProductTemplateResource($product));
     }
 
     /**
      * Actualizar Producto
      */
-    public function update(ProductTemplateRequest $request, ProductTemplate $productTemplate): JsonResponse
+    public function update(ProductTemplateRequest $request, ProductTemplate $product): JsonResponse
     {
-        if ($this->isPlanProductTemplate($productTemplate)) {
+        if ($this->isPlanProductTemplate($product)) {
             return $this->error('Este producto es interno (plan de membresía) y no se puede editar directamente.', 403);
         }
 
         $data = $request->validated();
 
-        DB::transaction(function () use ($request, $productTemplate, $data) {
-            $productTemplate->update([
-                'name' => $data['name'] ?? $productTemplate->name,
-                'description' => array_key_exists('description', $data) ? $data['description'] : $productTemplate->description,
-                'price' => $data['price'] ?? $productTemplate->price,
-                'category_id' => $data['category_id'] ?? $productTemplate->category_id,
-                'uom_id' => array_key_exists('uom_id', $data) ? $data['uom_id'] : $productTemplate->uom_id,
-                'is_active' => $data['is_active'] ?? $productTemplate->is_active,
-                'is_pos_visible' => $data['is_pos_visible'] ?? $productTemplate->is_pos_visible,
-                'tracks_inventory' => $data['tracks_inventory'] ?? $productTemplate->tracks_inventory,
-                'is_service' => $data['is_service'] ?? $productTemplate->is_service,
+        DB::transaction(function () use ($request, $product, $data) {
+            $product->update([
+                'name' => $data['name'] ?? $product->name,
+                'description' => array_key_exists('description', $data) ? $data['description'] : $product->description,
+                'price' => $data['price'] ?? $product->price,
+                'category_id' => $data['category_id'] ?? $product->category_id,
+                'uom_id' => array_key_exists('uom_id', $data) ? $data['uom_id'] : $product->uom_id,
+                'is_active' => $data['is_active'] ?? $product->is_active,
+                'is_pos_visible' => $data['is_pos_visible'] ?? $product->is_pos_visible,
+                'tracks_inventory' => $data['tracks_inventory'] ?? $product->tracks_inventory,
+                'is_service' => $data['is_service'] ?? $product->is_service,
             ]);
 
-            $this->handleImagesUpdate($request, $productTemplate);
+            $this->handleImagesUpdate($request, $product);
             $this->handleAttributes($data);
 
             if (! empty($data['generatedVariants'])) {
-                $this->syncVariantsBySignature($data['generatedVariants'], $productTemplate);
+                $this->syncVariantsBySignature($data['generatedVariants'], $product);
             } elseif ($request->isMethod('put')) {
                 // Si es un PUT (reemplazo completo) y no hay variantes, nos aseguramos que haya exactamente una.
-                $existingVariant = $productTemplate->productProducts()->orderBy('is_principal', 'desc')->first();
+                $existingVariant = $product->productProducts()->orderBy('is_principal', 'desc')->first();
 
                 if ($existingVariant) {
                     $existingVariant->update([
@@ -192,12 +192,12 @@ final class ProductTemplateController extends Controller
                     ]);
 
                     // Kill other variants if any
-                    $productTemplate->productProducts()->where('id', '!=', $existingVariant->id)->delete();
+                    $product->productProducts()->where('id', '!=', $existingVariant->id)->delete();
                 } else {
-                    $productTemplate->productProducts()->create([
+                    $product->productProducts()->create([
                         'sku' => $data['sku'] ?? null,
                         'barcode' => $data['barcode'] ?? null,
-                        'price' => $data['price'] ?? $productTemplate->price,
+                        'price' => $data['price'] ?? $product->price,
                         'cost_price' => 0,
                         'is_principal' => true,
                     ]);
@@ -205,35 +205,35 @@ final class ProductTemplateController extends Controller
             }
         });
 
-        $productTemplate->load([
+        $product->load([
             'category',
             'mainImage',
             'images',
             'productProducts.attributeValues.attribute',
         ]);
 
-        return $this->success(new ProductTemplateResource($productTemplate));
+        return $this->success(new ProductTemplateResource($product));
     }
 
     /**
      * Eliminar Producto
      */
-    public function destroy(ProductTemplate $productTemplate): JsonResponse
+    public function destroy(ProductTemplate $product): JsonResponse
     {
-        if ($this->isPlanProductTemplate($productTemplate)) {
+        if ($this->isPlanProductTemplate($product)) {
             return $this->error('Este producto es interno (plan de membresía) y no se puede eliminar.', 403);
         }
 
-        if ($productTemplate->productProducts()->exists()) {
-            $productTemplate->productProducts()->delete();
+        if ($product->productProducts()->exists()) {
+            $product->productProducts()->delete();
         }
 
-        $productTemplate->images()->each(function ($image) {
+        $product->images()->each(function ($image) {
             Storage::disk('public')->delete($image->path);
             $image->delete();
         });
 
-        $productTemplate->delete();
+        $product->delete();
 
         return $this->noContent();
     }
@@ -241,22 +241,22 @@ final class ProductTemplateController extends Controller
     /**
      * Cambiar Estado
      */
-    public function toggleStatus(ProductTemplate $productTemplate): JsonResponse
+    public function toggleStatus(ProductTemplate $product): JsonResponse
     {
-        if ($this->isPlanProductTemplate($productTemplate)) {
+        if ($this->isPlanProductTemplate($product)) {
             return $this->error('Este producto es interno (plan de membresía) y no se puede modificar su estado visualmente.', 403);
         }
 
-        $productTemplate->update([
-            'is_active' => ! $productTemplate->is_active,
+        $product->update([
+            'is_active' => ! $product->is_active,
         ]);
 
-        return $this->success(new ProductTemplateResource($productTemplate->fresh()->load('category')));
+        return $this->success(new ProductTemplateResource($product->fresh()->load('category')));
     }
 
-    private function isPlanProductTemplate(ProductTemplate $productTemplate): bool
+    private function isPlanProductTemplate(ProductTemplate $product): bool
     {
-        return $productTemplate->category && $productTemplate->category->name === 'Suscripciones';
+        return $product->category && $product->category->name === 'Suscripciones';
     }
 
     /*
@@ -363,9 +363,9 @@ final class ProductTemplateController extends Controller
         }
     }
 
-    private function syncVariantsBySignature(array $generatedVariants, ProductTemplate $productTemplate): void
+    private function syncVariantsBySignature(array $generatedVariants, ProductTemplate $product): void
     {
-        $existingVariants = $productTemplate->productProducts()->with('attributeValues')->get();
+        $existingVariants = $product->productProducts()->with('attributeValues')->get();
         $processedIds = [];
         $signatureMap = [];
 
@@ -401,10 +401,10 @@ final class ProductTemplateController extends Controller
                 $processedIds[] = $existing->id;
             } else {
                 // Create
-                $productProduct = $productTemplate->productProducts()->create([
+                $productProduct = $product->productProducts()->create([
                     'sku' => $variantData['sku'] ?? null,
                     'barcode' => $variantData['barcode'] ?? null,
-                    'price' => $variantData['price'] ?? $productTemplate->price,
+                    'price' => $variantData['price'] ?? $product->price,
                     'cost_price' => $variantData['cost_price'] ?? 0,
                     'is_principal' => false,
                 ]);
@@ -426,10 +426,10 @@ final class ProductTemplateController extends Controller
         }
 
         // Delete any variant that was not processed (meaning it was removed by the user)
-        $productTemplate->productProducts()->whereNotIn('id', $processedIds)->delete();
+        $product->productProducts()->whereNotIn('id', $processedIds)->delete();
 
         // Ensure at least one principal variant exists if we have ANY variants left
-        $remaining = $productTemplate->productProducts()->get();
+        $remaining = $product->productProducts()->get();
         if ($remaining->isNotEmpty() && $remaining->where('is_principal', true)->isEmpty()) {
             $remaining->first()->update(['is_principal' => true]);
         }

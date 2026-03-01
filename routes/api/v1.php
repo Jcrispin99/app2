@@ -69,7 +69,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('attributes/form-options', [AttributeController::class, 'formOptions']);
     Route::apiResource('attributes', AttributeController::class);
 
-    Route::patch('products/{product_template}/toggle-status', [ProductTemplateController::class, 'toggleStatus']);
+    Route::patch('products/{product}/toggle-status', [ProductTemplateController::class, 'toggleStatus']);
     Route::get('products/form-options', [ProductTemplateController::class, 'formOptions']);
     Route::apiResource('products', ProductTemplateController::class);
 
@@ -156,7 +156,6 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('pos-sessions/{pos_session}', [PosSessionController::class, 'show']);
 
     Route::get('pos-session-payments', [PosSessionPaymentController::class, 'index']);
-
 });
 
 // Password reset routes (public with rate limiting)
