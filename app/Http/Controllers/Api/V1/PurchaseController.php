@@ -192,6 +192,18 @@ final class PurchaseController extends Controller
                 $numberParts = $sequenceClass::getNextParts($defaultJournal->id);
                 $serie = $numberParts['serie'];
                 $correlative = $numberParts['correlative'];
+            } else {
+                // Fallback a generar el correlativo manualmente basado en el último registro
+                $lastPurchase = Purchase::where('company_id', $companyId)
+                    ->where('serie', $serie)
+                    ->lockForUpdate()
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+                if ($lastPurchase && is_numeric($lastPurchase->correlative)) {
+                    $nextCorrelative = (int) $lastPurchase->correlative + 1;
+                    $correlative = str_pad((string) $nextCorrelative, 7, '0', STR_PAD_LEFT);
+                }
             }
 
             $purchase = Purchase::create([
