@@ -21,6 +21,7 @@ final class AttributeValueResource extends JsonResource
         return [
             'id' => $this->id,
             'attribute_id' => $this->attribute_id,
+            'attribute_name' => $this->whenLoaded('attribute', fn() => $this->attribute->name),
             'value' => $this->value,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
