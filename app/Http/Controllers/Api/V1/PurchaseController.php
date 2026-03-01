@@ -405,6 +405,31 @@ final class PurchaseController extends Controller
     }
 
     /**
+     * Pagar Compra
+     */
+    public function pay(Purchase $purchase): JsonResponse
+    {
+        if ($purchase->status !== 'posted') {
+            return $this->error('Solo se pueden pagar compras publicadas.', 422);
+        }
+
+        if ($purchase->payment_status === 'paid') {
+            return $this->error('La compra ya está pagada.', 422);
+        }
+
+        DB::transaction(function () use ($purchase) {
+            $purchase->update(['payment_status' => 'paid']);
+
+            activity()
+                ->performedOn($purchase)
+                ->causedBy(request()->user())
+                ->log('Compra Pagada');
+        });
+
+        return $this->success(new PurchaseResource($purchase->fresh()->load(self::PURCHASE_LOAD_RELATIONS)));
+    }
+
+    /**
      * @param  array<string, mixed>  $productData
      * @return array<string, mixed>
      */

@@ -63,7 +63,7 @@ class MemberRequest extends FormRequest
                 'max:20',
                 Rule::unique('partners', 'document_number')
                     ->ignore($memberId)
-                    ->where(fn ($q) => $q->where('document_type', $this->input('document_type'))),
+                    ->where(fn($q) => $q->where('document_type', $this->input('document_type'))),
             ];
 
             // Status is required only on update

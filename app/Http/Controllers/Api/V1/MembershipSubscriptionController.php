@@ -113,4 +113,33 @@ final class MembershipSubscriptionController extends Controller
 
         return new MembershipSubscriptionResource($membershipSubscription);
     }
+
+    /**
+     * Actualizar Suscripción
+     */
+    public function update(MembershipSubscriptionRequest $request, MembershipSubscription $membershipSubscription): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $plan = MembershipPlan::findOrFail($validated['membership_plan_id']);
+
+        // Compute temporal dates automatically based on new plan or start date
+        $startDate = \Carbon\Carbon::parse($validated['start_date']);
+        $originalEndDate = $startDate->copy()->addDays($plan->duration_days);
+
+        $subscriptionData = array_merge($validated, [
+            'original_end_date' => $originalEndDate->toDateString(),
+            // Keeping end_date logical sync. Freezes logic would normally require complex recalcs.
+            'end_date' => $originalEndDate->clone()->addDays($membershipSubscription->total_days_frozen ?? 0)->toDateString(),
+            'remaining_freeze_days' => $plan->allows_freezing ? $plan->max_freeze_days : 0,
+        ]);
+
+        $membershipSubscription->update($subscriptionData);
+        $membershipSubscription->load(['plan', 'partner', 'company']);
+
+        return response()->json([
+            'message' => 'Suscripción actualizada exitosamente.',
+            'data' => new MembershipSubscriptionResource($membershipSubscription),
+        ]);
+    }
 }

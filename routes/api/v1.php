@@ -88,6 +88,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::get('purchases/form-options', [PurchaseController::class, 'formOptions']);
     Route::patch('purchases/{purchase}/post', [PurchaseController::class, 'post']);
     Route::patch('purchases/{purchase}/cancel', [PurchaseController::class, 'cancel']);
+    Route::patch('purchases/{purchase}/pay', [PurchaseController::class, 'pay']);
     Route::apiResource('purchases', PurchaseController::class);
 
     Route::get('sales/form-options', [SaleController::class, 'formOptions']);
@@ -118,7 +119,7 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
     Route::apiResource('membership-plans', MembershipPlanController::class);
 
     // Membership Subscriptions & Nested Freezes
-    Route::apiResource('membership-subscriptions', MembershipSubscriptionController::class)->except(['update', 'destroy']);
+    Route::apiResource('membership-subscriptions', MembershipSubscriptionController::class)->except(['destroy']);
 
     // Freeze Action Routes
     Route::post('membership-subscriptions/{subscription}/freezes', [SubscriptionFreezeController::class, 'store']);
