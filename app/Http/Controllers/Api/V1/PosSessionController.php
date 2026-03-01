@@ -7,16 +7,15 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\PosSessionRequest;
 use App\Http\Resources\PosSessionResource;
-use App\Models\PosConfig;
 use App\Models\PosSession;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class PosSessionController extends Controller
+final class PosSessionController extends Controller
 {
     /**
-     * Display a listing of historical POS Sessions.
+     * Listar Turnos de Caja
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -51,7 +50,7 @@ class PosSessionController extends Controller
     }
 
     /**
-     * Open a new shift/session for a POS Config.
+     * Abrir Turno de Caja
      */
     public function open(PosSessionRequest $request): JsonResponse
     {
@@ -98,7 +97,7 @@ class PosSessionController extends Controller
     }
 
     /**
-     * Display a specific Session and its payments.
+     * Ver Turno de Caja
      */
     public function show(PosSession $posSession): PosSessionResource
     {
@@ -106,7 +105,7 @@ class PosSessionController extends Controller
     }
 
     /**
-     * Close the Session, recording closing cash flow.
+     * Cerrar Turno de Caja
      */
     public function close(PosSessionRequest $request, PosSession $posSession): JsonResponse
     {
@@ -118,7 +117,7 @@ class PosSessionController extends Controller
 
         // In a strict ERP, only the cashiers or admins can close their own boxes
         if ($posSession->user_id !== (auth()->id() ?? 1) && ! auth()->user()?->hasRole('admin')) {
-             return response()->json([
+            return response()->json([
                 'message' => 'Solo el titular o un administrador puede cerrar esta caja.',
             ], 403);
         }

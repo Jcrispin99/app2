@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 final class MembershipPlanController extends Controller
 {
     /**
-     * Provide minimal options list (Select comboboxes).
+     * Opciones de Formulario
      */
     public function formOptions(): JsonResponse
     {
@@ -27,7 +27,7 @@ final class MembershipPlanController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Listar Planes de Suscripción
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -72,7 +72,7 @@ final class MembershipPlanController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crear Plan de Suscripción
      */
     public function store(MembershipPlanRequest $request): JsonResponse
     {
@@ -88,7 +88,7 @@ final class MembershipPlanController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Ver Plan de Suscripción
      */
     public function show(MembershipPlan $membershipPlan): MembershipPlanResource
     {
@@ -98,7 +98,7 @@ final class MembershipPlanController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar Plan de Suscripción
      */
     public function update(MembershipPlanRequest $request, MembershipPlan $membershipPlan): JsonResponse
     {
@@ -112,8 +112,7 @@ final class MembershipPlanController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     * Note: Deletion is locked if bound to active historic Subscriptions.
+     * Eliminar Plan de Suscripción
      */
     public function destroy(MembershipPlan $membershipPlan): JsonResponse
     {
@@ -129,7 +128,7 @@ final class MembershipPlanController extends Controller
     }
 
     /**
-     * Utility method: Toggle `is_active` flag from data tables.
+     * Cambiar Estado
      */
     public function toggleStatus(MembershipPlan $membershipPlan): JsonResponse
     {

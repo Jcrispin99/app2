@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 
 final class WarehouseController extends Controller
 {
+    /**
+     * Listar Almacenes
+     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 25);
@@ -32,6 +35,9 @@ final class WarehouseController extends Controller
         );
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $companies = \App\Models\Company::query()->orderBy('business_name')->get();
@@ -41,6 +47,9 @@ final class WarehouseController extends Controller
         ], 'Form options retrieved successfully');
     }
 
+    /**
+     * Crear Almacén
+     */
     public function store(WarehouseRequest $request): JsonResponse
     {
         $warehouse = Warehouse::create($request->validated());
@@ -49,6 +58,9 @@ final class WarehouseController extends Controller
         return $this->created(new WarehouseResource($warehouse));
     }
 
+    /**
+     * Ver Almacén
+     */
     public function show(Warehouse $warehouse): JsonResponse
     {
         $warehouse->load('company');
@@ -56,6 +68,9 @@ final class WarehouseController extends Controller
         return $this->success(new WarehouseResource($warehouse));
     }
 
+    /**
+     * Actualizar Almacén
+     */
     public function update(WarehouseRequest $request, Warehouse $warehouse): JsonResponse
     {
         $warehouse->update($request->validated());
@@ -64,12 +79,18 @@ final class WarehouseController extends Controller
         return $this->success(new WarehouseResource($warehouse));
     }
 
+    /**
+     * Eliminar Almacén
+     */
     public function destroy(Warehouse $warehouse): JsonResponse
     {
         $warehouse->delete();
 
         return $this->noContent();
     }
+    /**
+     * Cambiar Estado
+     */
     public function toggleStatus(Warehouse $warehouse): JsonResponse
     {
         $warehouse->update([

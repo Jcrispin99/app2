@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 final class PaymentMethodController extends Controller
 {
     /**
-     * Display a paginated listing of Payment Methods.
+     * Listar Métodos de Pago
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -42,7 +42,7 @@ final class PaymentMethodController extends Controller
     }
 
     /**
-     * Store a newly created Payment Method.
+     * Crear Método de Pago
      */
     public function store(PaymentMethodRequest $request): JsonResponse
     {
@@ -57,7 +57,7 @@ final class PaymentMethodController extends Controller
     }
 
     /**
-     * Display the specified Payment Method.
+     * Ver Método de Pago
      */
     public function show(PaymentMethod $paymentMethod): PaymentMethodResource
     {
@@ -65,7 +65,7 @@ final class PaymentMethodController extends Controller
     }
 
     /**
-     * Update the specified Payment Method.
+     * Actualizar Método de Pago
      */
     public function update(PaymentMethodRequest $request, PaymentMethod $paymentMethod): JsonResponse
     {
@@ -80,7 +80,7 @@ final class PaymentMethodController extends Controller
     }
 
     /**
-     * Remove the specified Payment Method.
+     * Eliminar Método de Pago
      */
     public function destroy(PaymentMethod $paymentMethod): JsonResponse
     {
@@ -92,7 +92,9 @@ final class PaymentMethodController extends Controller
             'message' => 'Método de pago eliminado exitosamente.',
         ]);
     }
-
+    /**
+     * Cambiar Estado
+     */
     public function toggleStatus(PaymentMethod $paymentMethod): JsonResponse
     {
         $paymentMethod->update([

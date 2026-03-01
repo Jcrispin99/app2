@@ -17,7 +17,7 @@ use Illuminate\Http\JsonResponse;
 final class SubscriptionFreezeController extends Controller
 {
     /**
-     * Start/Request a new Periodical Freeze.
+     * Congelar Suscripción
      */
     public function store(SubscriptionFreezeRequest $request, MembershipSubscription $subscription): JsonResponse
     {
@@ -51,7 +51,7 @@ final class SubscriptionFreezeController extends Controller
     }
 
     /**
-     * Mark a Freeze as completed manually or proactively.
+     * Completar Congelamiento
      */
     public function complete(MembershipFreeze $freeze): JsonResponse
     {
@@ -72,7 +72,7 @@ final class SubscriptionFreezeController extends Controller
     }
 
     /**
-     * Abort / Cancel a queued or active Freeze.
+     * Cancelar Congelamiento
      */
     public function cancel(MembershipFreeze $freeze): JsonResponse
     {

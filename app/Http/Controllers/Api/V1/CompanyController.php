@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 final class CompanyController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listar Sedes / Empresas
      */
     public function index(Request $request): JsonResponse
     {
@@ -45,6 +45,9 @@ final class CompanyController extends Controller
         );
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $companies = Company::query()
@@ -58,7 +61,7 @@ final class CompanyController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Crear Empresa / Sede
      */
     public function store(CompanyRequest $request): JsonResponse
     {
@@ -68,7 +71,7 @@ final class CompanyController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Ver Empresa / Sede
      */
     public function show(Company $company): JsonResponse
     {
@@ -76,7 +79,7 @@ final class CompanyController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Actualizar Empresa / Sede
      */
     public function update(CompanyRequest $request, Company $company): JsonResponse
     {
@@ -85,6 +88,9 @@ final class CompanyController extends Controller
         return $this->success(new CompanyResource($company));
     }
 
+    /**
+     * Eliminar Empresa / Sede
+     */
     public function destroy(Company $company): JsonResponse
     {
         $company->delete();
@@ -93,7 +99,7 @@ final class CompanyController extends Controller
     }
 
     /**
-     * Toggle the active status of the resource.
+     * Cambiar Estado
      */
     public function toggleStatus(Company $company): JsonResponse
     {

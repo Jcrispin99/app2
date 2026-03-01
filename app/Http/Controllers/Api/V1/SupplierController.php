@@ -14,6 +14,9 @@ use Spatie\Activitylog\Models\Activity;
 
 final class SupplierController extends Controller
 {
+    /**
+     * Listar Proveedores
+     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 25);
@@ -66,6 +69,9 @@ final class SupplierController extends Controller
         ]);
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $companies = \App\Models\Company::query()->orderBy('business_name')->get();
@@ -79,6 +85,9 @@ final class SupplierController extends Controller
         ]);
     }
 
+    /**
+     * Ver Proveedor
+     */
     public function show(Partner $supplier): JsonResponse
     {
         if (! $supplier->is_supplier) {
@@ -104,6 +113,9 @@ final class SupplierController extends Controller
         ]);
     }
 
+    /**
+     * Crear Proveedor
+     */
     public function store(SupplierRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -136,6 +148,9 @@ final class SupplierController extends Controller
         return $this->created(new SupplierResource($created->load('company')));
     }
 
+    /**
+     * Actualizar Proveedor
+     */
     public function update(SupplierRequest $request, Partner $supplier): JsonResponse
     {
         if (! $supplier->is_supplier) {
@@ -154,6 +169,9 @@ final class SupplierController extends Controller
         return $this->success(new SupplierResource($supplier->fresh()->load('company')));
     }
 
+    /**
+     * Eliminar Proveedor
+     */
     public function destroy(Partner $supplier): JsonResponse
     {
         if (! $supplier->is_supplier) {
@@ -165,6 +183,9 @@ final class SupplierController extends Controller
         return $this->noContent();
     }
 
+    /**
+     * Cambiar Estado
+     */
     public function toggleStatus(Partner $supplier): JsonResponse
     {
         if (! $supplier->is_supplier) {

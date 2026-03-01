@@ -42,6 +42,9 @@ final class SaleController extends Controller
         'creditNotes.journal',
     ];
 
+    /**
+     * Listar Ventas
+     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 25);
@@ -112,6 +115,9 @@ final class SaleController extends Controller
         ]);
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $customers = Partner::query()
@@ -137,6 +143,9 @@ final class SaleController extends Controller
         ], 'Form options retrieved successfully');
     }
 
+    /**
+     * Ver Venta
+     */
     public function show(Sale $sale): JsonResponse
     {
         $sale->load(self::SALE_LOAD_RELATIONS);
@@ -157,6 +166,9 @@ final class SaleController extends Controller
         ]);
     }
 
+    /**
+     * Crear Venta
+     */
     public function store(SaleRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -289,6 +301,9 @@ final class SaleController extends Controller
         return $this->created(new SaleResource($sale));
     }
 
+    /**
+     * Actualizar Venta
+     */
     public function update(SaleRequest $request, Sale $sale): JsonResponse
     {
         $validated = $request->validated();
@@ -356,6 +371,9 @@ final class SaleController extends Controller
         return $this->success(new SaleResource($sale->fresh()->load(self::SALE_LOAD_RELATIONS)));
     }
 
+    /**
+     * Eliminar Venta
+     */
     public function destroy(Sale $sale): JsonResponse
     {
         if ($sale->status !== 'draft') {
@@ -370,6 +388,9 @@ final class SaleController extends Controller
         return $this->noContent();
     }
 
+    /**
+     * Publicar Venta
+     */
     public function post(Sale $sale, KardexService $kardexService): JsonResponse
     {
         if ($sale->status !== 'draft') {
@@ -409,6 +430,9 @@ final class SaleController extends Controller
         return $this->success(new SaleResource($sale->fresh()->load(self::SALE_LOAD_RELATIONS)));
     }
 
+    /**
+     * Cancelar Venta
+     */
     public function cancel(Sale $sale, KardexService $kardexService): JsonResponse
     {
         if ($sale->status !== 'posted') {
@@ -451,6 +475,9 @@ final class SaleController extends Controller
         return $this->success(new SaleResource($sale->fresh()->load(self::SALE_LOAD_RELATIONS)));
     }
 
+    /**
+     * Crear Nota de Crédito
+     */
     public function createCreditNote(Sale $sale): JsonResponse
     {
         $sale->loadMissing(['products', 'journal']);

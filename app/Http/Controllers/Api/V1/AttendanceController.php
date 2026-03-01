@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 class AttendanceController extends Controller
 {
     /**
-     * Display a paginated listing of all Attendances.
+     * Listar Asistencias
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -83,8 +83,7 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Mark a "Check-In" reading identity via ID or Document Number.
-     * Denies/Validates via Subscription rules.
+     * Registrar Entrada (Check-In)
      */
     public function checkIn(AttendanceCheckInRequest $request): JsonResponse
     {
@@ -159,7 +158,7 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Close the attendance session setting Check-Out Time.
+     * Registrar Salida (Check-Out)
      */
     public function checkOut(Attendance $attendance): JsonResponse
     {
@@ -178,7 +177,7 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Show single file profile (rarely used over index rows).
+     * Ver Asistencia Individual
      */
     public function show(Attendance $attendance): AttendanceResource
     {

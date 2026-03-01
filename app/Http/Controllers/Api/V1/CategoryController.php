@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 final class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listar Categorías
      */
     public function index(Request $request): JsonResponse
     {
@@ -44,6 +44,9 @@ final class CategoryController extends Controller
         );
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $categories = Category::query()
@@ -57,7 +60,7 @@ final class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crear Categoría
      */
     public function store(CategoryRequest $request): JsonResponse
     {
@@ -67,7 +70,7 @@ final class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Ver Categoría
      */
     public function show(Category $category): JsonResponse
     {
@@ -75,7 +78,7 @@ final class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar Categoría
      */
     public function update(CategoryRequest $request, Category $category): JsonResponse
     {
@@ -85,7 +88,7 @@ final class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar Categoría
      */
     public function destroy(Category $category): JsonResponse
     {
@@ -95,12 +98,12 @@ final class CategoryController extends Controller
     }
 
     /**
-     * Toggle the active status of the resource.
+     * Cambiar Estado
      */
     public function toggleStatus(Category $category): JsonResponse
     {
         $category->update([
-            'is_active' => !$category->is_active,
+            'is_active' => ! $category->is_active,
         ]);
 
         return $this->success(new CategoryResource($category));

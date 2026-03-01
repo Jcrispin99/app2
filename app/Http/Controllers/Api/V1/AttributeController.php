@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 final class AttributeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listar Atributos
      */
     public function index(Request $request): JsonResponse
     {
@@ -40,6 +40,9 @@ final class AttributeController extends Controller
         );
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         return $this->success([
@@ -52,7 +55,7 @@ final class AttributeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crear Atributo
      */
     public function store(AttributeRequest $request): JsonResponse
     {
@@ -77,7 +80,7 @@ final class AttributeController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Ver Atributo
      */
     public function show(Attribute $attribute): JsonResponse
     {
@@ -87,7 +90,7 @@ final class AttributeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar Atributo
      */
     public function update(AttributeRequest $request, Attribute $attribute): JsonResponse
     {
@@ -125,7 +128,7 @@ final class AttributeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar Atributo
      */
     public function destroy(Attribute $attribute): JsonResponse
     {
@@ -135,12 +138,12 @@ final class AttributeController extends Controller
     }
 
     /**
-     * Toggle the active status of the resource.
+     * Cambiar Estado
      */
     public function toggleStatus(Attribute $attribute): JsonResponse
     {
         $attribute->update([
-            'is_active' => !$attribute->is_active,
+            'is_active' => ! $attribute->is_active,
         ]);
 
         return $this->success(new AttributeResource($attribute));

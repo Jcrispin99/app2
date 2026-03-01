@@ -37,6 +37,9 @@ final class PurchaseController extends Controller
         'productables.uom',
     ];
 
+    /**
+     * Listar Compras
+     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 25);
@@ -101,6 +104,9 @@ final class PurchaseController extends Controller
         ]);
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $suppliers = Partner::query()
@@ -128,6 +134,9 @@ final class PurchaseController extends Controller
         ], 'Form options retrieved successfully');
     }
 
+    /**
+     * Ver Compra
+     */
     public function show(Purchase $purchase): JsonResponse
     {
         $purchase->load(self::PURCHASE_LOAD_RELATIONS);
@@ -148,6 +157,9 @@ final class PurchaseController extends Controller
         ]);
     }
 
+    /**
+     * Crear Compra
+     */
     public function store(PurchaseRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -240,6 +252,9 @@ final class PurchaseController extends Controller
         return $this->created(new PurchaseResource($purchase));
     }
 
+    /**
+     * Actualizar Compra
+     */
     public function update(PurchaseRequest $request, Purchase $purchase): JsonResponse
     {
         if ($purchase->status !== 'draft') {
@@ -298,6 +313,9 @@ final class PurchaseController extends Controller
         return $this->success(new PurchaseResource($purchase->fresh()->load(self::PURCHASE_LOAD_RELATIONS)));
     }
 
+    /**
+     * Eliminar Compra
+     */
     public function destroy(Purchase $purchase): JsonResponse
     {
         if ($purchase->status !== 'draft') {
@@ -312,6 +330,9 @@ final class PurchaseController extends Controller
         return $this->noContent();
     }
 
+    /**
+     * Publicar Compra
+     */
     public function post(Purchase $purchase, KardexService $kardexService): JsonResponse
     {
         if ($purchase->status !== 'draft') {
@@ -348,6 +369,9 @@ final class PurchaseController extends Controller
         return $this->success(new PurchaseResource($purchase->fresh()->load(self::PURCHASE_LOAD_RELATIONS)));
     }
 
+    /**
+     * Cancelar Compra
+     */
     public function cancel(Purchase $purchase, KardexService $kardexService): JsonResponse
     {
         if ($purchase->status !== 'posted') {

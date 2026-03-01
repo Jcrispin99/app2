@@ -16,7 +16,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 final class MembershipSubscriptionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listar Suscripciones
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -70,7 +70,7 @@ final class MembershipSubscriptionController extends Controller
     }
 
     /**
-     * Store/Sell a newly created resource in storage.
+     * Crear Suscripción
      */
     public function store(MembershipSubscriptionRequest $request): JsonResponse
     {
@@ -103,7 +103,7 @@ final class MembershipSubscriptionController extends Controller
     }
 
     /**
-     * Display the specified resource, returning deep relationships.
+     * Ver Suscripción
      */
     public function show(MembershipSubscription $membershipSubscription): MembershipSubscriptionResource
     {

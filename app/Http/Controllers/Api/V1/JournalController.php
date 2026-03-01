@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 final class JournalController extends Controller
 {
     /**
-     * Provide options for creating or filtering Journals.
+     * Opciones de Formulario
      */
     public function formOptions(): JsonResponse
     {
@@ -30,7 +30,7 @@ final class JournalController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Listar Diarios
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -76,7 +76,7 @@ final class JournalController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crear Diario
      */
     public function store(JournalRequest $request): JsonResponse
     {
@@ -111,7 +111,7 @@ final class JournalController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Ver Diario
      */
     public function show(Journal $journal): JournalResource
     {
@@ -121,7 +121,7 @@ final class JournalController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar Diario
      */
     public function update(JournalRequest $request, Journal $journal): JsonResponse
     {
@@ -152,7 +152,7 @@ final class JournalController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar Diario
      */
     public function destroy(Journal $journal): JsonResponse
     {
@@ -179,7 +179,7 @@ final class JournalController extends Controller
     }
 
     /**
-     * Reset the sequence counter dynamically
+     * Reiniciar Secuencia
      */
     public function resetSequence(Journal $journal): JsonResponse
     {

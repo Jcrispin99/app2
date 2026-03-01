@@ -15,7 +15,7 @@ use App\Models\User;
 final class GlobalSearchController extends Controller
 {
     /**
-     * Perform a global search across multiple entities.
+     * Búsqueda Global
      */
     public function search(Request $request): JsonResponse
     {

@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 final class UnitOfMeasureController extends Controller
 {
     /**
-     * Provide lists or structured groups of families for frontend interfaces.
+     * Opciones de Formulario
      */
     public function formOptions(): JsonResponse
     {
@@ -34,7 +34,7 @@ final class UnitOfMeasureController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Listar Unidades de Medida
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -95,7 +95,7 @@ final class UnitOfMeasureController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crear Unidad de Medida
      */
     public function store(UnitOfMeasureRequest $request): JsonResponse
     {
@@ -122,7 +122,7 @@ final class UnitOfMeasureController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Ver Unidad de Medida
      */
     public function show(UnitOfMeasure $unitOfMeasure): UnitOfMeasureResource
     {
@@ -132,7 +132,7 @@ final class UnitOfMeasureController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar Unidad de Medida
      */
     public function update(UnitOfMeasureRequest $request, UnitOfMeasure $unitOfMeasure): JsonResponse
     {
@@ -165,7 +165,7 @@ final class UnitOfMeasureController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar Unidad de Medida
      */
     public function destroy(UnitOfMeasure $unitOfMeasure): JsonResponse
     {
@@ -187,7 +187,7 @@ final class UnitOfMeasureController extends Controller
     }
 
     /**
-     * Toggle the UoM status flag.
+     * Cambiar Estado
      */
     public function toggleStatus(UnitOfMeasure $unitOfMeasure): JsonResponse
     {

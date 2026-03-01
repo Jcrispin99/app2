@@ -15,6 +15,9 @@ use Spatie\Activitylog\Models\Activity;
 
 final class CustomerController extends Controller
 {
+    /**
+     * Listar Clientes
+     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 25);
@@ -97,6 +100,9 @@ final class CustomerController extends Controller
         return $this->success(CustomerResource::collection($query->get()));
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $companies = Company::query()
@@ -108,6 +114,9 @@ final class CustomerController extends Controller
         ], 'Form options retrieved successfully');
     }
 
+    /**
+     * Ver Cliente
+     */
     public function show(Partner $customer): JsonResponse
     {
         if (! $customer->is_customer) {
@@ -132,6 +141,9 @@ final class CustomerController extends Controller
         ]);
     }
 
+    /**
+     * Crear Cliente
+     */
     public function store(CustomerRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -158,6 +170,9 @@ final class CustomerController extends Controller
         return $this->created(new CustomerResource($created->load(['company', 'user'])));
     }
 
+    /**
+     * Actualizar Cliente
+     */
     public function update(CustomerRequest $request, Partner $customer): JsonResponse
     {
         if (! $customer->is_customer) {
@@ -173,6 +188,9 @@ final class CustomerController extends Controller
         return $this->success(new CustomerResource($customer->fresh()->load(['company', 'user'])));
     }
 
+    /**
+     * Eliminar Cliente
+     */
     public function destroy(Partner $customer): JsonResponse
     {
         if (! $customer->is_customer) {
@@ -185,7 +203,7 @@ final class CustomerController extends Controller
     }
 
     /**
-     * Toggle the active status of the resource.
+     * Cambiar Estado
      */
     public function toggleStatus(Partner $customer): JsonResponse
     {

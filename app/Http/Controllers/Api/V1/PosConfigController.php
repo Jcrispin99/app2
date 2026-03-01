@@ -13,10 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
-class PosConfigController extends Controller
+final class PosConfigController extends Controller
 {
     /**
-     * Display a listing of Pos Configurations.
+     * Listar Terminales POS
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -44,16 +44,14 @@ class PosConfigController extends Controller
         return PosConfigResource::collection($paginator);
     }
 
-
-
     /**
-     * Store a newly created Pos Config.
+     * Crear Terminal POS
      */
     public function store(PosConfigRequest $request): JsonResponse
     {
         $validated = $request->validated();
         $journalsData = $validated['journals'] ?? [];
-        
+
         // Remove journals from payload before creating parent
         unset($validated['journals']);
 
@@ -74,7 +72,7 @@ class PosConfigController extends Controller
 
         $posConfig = DB::transaction(function () use ($validated, $syncData) {
             $config = PosConfig::create($validated);
-            
+
             // Sync Journals logic
             $config->journals()->sync($syncData);
 
@@ -87,9 +85,8 @@ class PosConfigController extends Controller
         ], 201);
     }
 
-
     /**
-     * Display the specified Pos Config.
+     * Ver Terminal POS
      */
     public function show(PosConfig $posConfig): PosConfigResource
     {
@@ -97,20 +94,20 @@ class PosConfigController extends Controller
     }
 
     /**
-     * Update the specified Pos Config.
+     * Actualizar Terminal POS
      */
     public function update(PosConfigRequest $request, PosConfig $posConfig): JsonResponse
     {
         $validated = $request->validated();
         $journalsData = $validated['journals'] ?? null;
-        
+
         if (isset($validated['journals'])) {
             unset($validated['journals']);
         }
 
         $posConfig = DB::transaction(function () use ($posConfig, $validated, $journalsData) {
             $posConfig->update($validated);
-            
+
             if ($journalsData !== null) {
                 // Translate the simple array input array into what Eloquent sync() needs
                 $syncData = [];
@@ -121,7 +118,7 @@ class PosConfigController extends Controller
                         'is_default' => $journalEntry['is_default'] ?? false,
                     ];
                 }
-                
+
                 // Wipe and recreate relationships with fresh pivot properties
                 $posConfig->journals()->sync($syncData);
             }
@@ -136,7 +133,7 @@ class PosConfigController extends Controller
     }
 
     /**
-     * Remove the specified Pos Config.
+     * Eliminar Terminal POS
      */
     public function destroy(PosConfig $posConfig): JsonResponse
     {
@@ -151,6 +148,9 @@ class PosConfigController extends Controller
         ]);
     }
 
+    /**
+     * Cambiar Estado
+     */
     public function toggleStatus(PosConfig $posConfig): JsonResponse
     {
         $posConfig->update([

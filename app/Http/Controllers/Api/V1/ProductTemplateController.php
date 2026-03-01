@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Storage;
 
 final class ProductTemplateController extends Controller
 {
+    /**
+     * Listar Productos
+     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 25);
@@ -44,6 +47,9 @@ final class ProductTemplateController extends Controller
         );
     }
 
+    /**
+     * Opciones de Formulario
+     */
     public function formOptions(): JsonResponse
     {
         $categories = \App\Models\Category::query()->orderBy('name')->get();
@@ -55,6 +61,9 @@ final class ProductTemplateController extends Controller
         ], 'Form options retrieved successfully');
     }
 
+    /**
+     * Crear Producto
+     */
     public function store(ProductTemplateRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -126,6 +135,9 @@ final class ProductTemplateController extends Controller
         return $this->created(new ProductTemplateResource($productTemplate));
     }
 
+    /**
+     * Ver Producto
+     */
     public function show(ProductTemplate $productTemplate): JsonResponse
     {
         $productTemplate->load([
@@ -138,6 +150,9 @@ final class ProductTemplateController extends Controller
         return $this->success(new ProductTemplateResource($productTemplate));
     }
 
+    /**
+     * Actualizar Producto
+     */
     public function update(ProductTemplateRequest $request, ProductTemplate $productTemplate): JsonResponse
     {
         if ($this->isPlanProductTemplate($productTemplate)) {
@@ -200,6 +215,9 @@ final class ProductTemplateController extends Controller
         return $this->success(new ProductTemplateResource($productTemplate));
     }
 
+    /**
+     * Eliminar Producto
+     */
     public function destroy(ProductTemplate $productTemplate): JsonResponse
     {
         if ($this->isPlanProductTemplate($productTemplate)) {
@@ -220,6 +238,9 @@ final class ProductTemplateController extends Controller
         return $this->noContent();
     }
 
+    /**
+     * Cambiar Estado
+     */
     public function toggleStatus(ProductTemplate $productTemplate): JsonResponse
     {
         if ($this->isPlanProductTemplate($productTemplate)) {

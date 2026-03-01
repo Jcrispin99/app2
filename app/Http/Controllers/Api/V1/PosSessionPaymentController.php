@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class PosSessionPaymentController extends Controller
 {
     /**
-     * Display a listing of individual payments collected during shifts.
+     * Listar Pagos de Turno
      */
     public function index(Request $request): AnonymousResourceCollection
     {

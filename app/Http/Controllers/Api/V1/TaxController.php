@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 final class TaxController extends Controller
 {
     /**
-     * Provide active taxes directly for form selects.
+     * Opciones de Formulario
      */
     public function formOptions(): JsonResponse
     {
@@ -28,7 +28,7 @@ final class TaxController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Listar Impuestos
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -71,7 +71,7 @@ final class TaxController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crear Impuesto
      */
     public function store(TaxRequest $request): JsonResponse
     {
@@ -95,7 +95,7 @@ final class TaxController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Ver Impuesto
      */
     public function show(Tax $tax): TaxResource
     {
@@ -103,7 +103,7 @@ final class TaxController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar Impuesto
      */
     public function update(TaxRequest $request, Tax $tax): JsonResponse
     {
@@ -130,7 +130,7 @@ final class TaxController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar Impuesto
      */
     public function destroy(Tax $tax): JsonResponse
     {
@@ -147,7 +147,7 @@ final class TaxController extends Controller
     }
 
     /**
-     * Toggle tax `is_active` status flag
+     * Cambiar Estado
      */
     public function toggleStatus(Tax $tax): JsonResponse
     {

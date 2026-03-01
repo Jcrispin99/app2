@@ -20,7 +20,7 @@ use Spatie\Activitylog\Models\Activity;
 final class MemberController extends Controller
 {
     /**
-     * Display a listing of members.
+     * Listar Miembros
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -83,7 +83,7 @@ final class MemberController extends Controller
     }
 
     /**
-     * Store and register a new member, applying upsert if Document exists for another Partner Type.
+     * Crear Miembro
      */
     public function store(MemberRequest $request): JsonResponse
     {
@@ -115,7 +115,7 @@ final class MemberController extends Controller
     }
 
     /**
-     * Display the specified member.
+     * Ver Miembro
      */
     public function show(Partner $member): JsonResponse
     {
@@ -140,7 +140,7 @@ final class MemberController extends Controller
     }
 
     /**
-     * Update the specified member in storage.
+     * Actualizar Miembro
      */
     public function update(MemberRequest $request, Partner $member): JsonResponse
     {
@@ -158,7 +158,7 @@ final class MemberController extends Controller
     }
 
     /**
-     * Remove the specified member from storage.
+     * Eliminar Miembro
      */
     public function destroy(Partner $member): JsonResponse
     {
@@ -172,7 +172,7 @@ final class MemberController extends Controller
     }
 
     /**
-     * Activate portal access for member enabling login functionalities.
+     * Activar Portal
      */
     public function activatePortal(Request $request, Partner $member): JsonResponse
     {
@@ -207,7 +207,7 @@ final class MemberController extends Controller
     }
 
     /**
-     * Provide Form Options to render frontend creations.
+     * Opciones de Formulario
      */
     public function formOptions(): JsonResponse
     {
@@ -223,7 +223,7 @@ final class MemberController extends Controller
     }
 
     /**
-     * Toggle the active status of the resource.
+     * Cambiar Estado
      */
     public function toggleStatus(Partner $member): JsonResponse
     {
