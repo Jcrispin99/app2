@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-final class Membershipfreeze extends Model
+final class MembershipFreeze extends Model
 {
     use SoftDeletes;
     use HasFactory, LogsActivity;
