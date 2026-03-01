@@ -30,9 +30,12 @@ final class SupplierRequest extends FormRequest
                 'max:20',
                 Rule::unique('partners', 'document_number')
                     ->ignore($supplierId)
-                    ->where(fn ($q) => $q->where('document_type', $this->input('document_type'))),
+                    ->where(fn($q) => $q->where('document_type', $this->input('document_type'))),
             ],
-            'name' => ['required', 'string', 'max:200'],
+            'name' => ['nullable', 'string', 'max:200'],
+            'business_name' => ['nullable', 'string', 'max:200'],
+            'first_name' => ['nullable', 'string', 'max:100'],
+            'last_name' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:100'],
             'phone' => ['nullable', 'string', 'max:20'],
             'mobile' => ['nullable', 'string', 'max:20'],
@@ -54,7 +57,7 @@ final class SupplierRequest extends FormRequest
                     return $rule;
                 }
 
-                return 'sometimes|'.$rule;
+                return 'sometimes|' . $rule;
             }, $rules);
         }
 

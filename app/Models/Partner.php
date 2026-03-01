@@ -29,6 +29,9 @@ final class Partner extends Model
         'document_number',
 
         'name',
+        'business_name',
+        'first_name',
+        'last_name',
 
         'email',
         'phone',
@@ -120,6 +123,10 @@ final class Partner extends Model
     {
         if ($this->business_name) {
             return $this->business_name;
+        }
+
+        if ($this->name) {
+            return $this->name;
         }
 
         return mb_trim("{$this->first_name} {$this->last_name}");

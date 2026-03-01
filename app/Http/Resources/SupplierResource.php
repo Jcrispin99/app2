@@ -24,6 +24,7 @@ final class SupplierResource extends JsonResource
             'is_member' => (bool) $this->is_member,
             'document_type' => $this->document_type,
             'document_number' => $this->document_number,
+            'name' => $this->name,
             'business_name' => $this->business_name,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
