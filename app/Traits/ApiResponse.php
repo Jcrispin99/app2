@@ -11,7 +11,7 @@ trait ApiResponse
 {
     protected function success(
         mixed $data = null,
-        string $message = 'Success',
+        string $message = 'Operación exitosa',
         int $code = Response::HTTP_OK
     ): JsonResponse {
         return response()->json([
@@ -23,7 +23,7 @@ trait ApiResponse
 
     protected function created(
         mixed $data = null,
-        string $message = 'Resource created successfully'
+        string $message = 'Recurso creado exitosamente'
     ): JsonResponse {
         return $this->success($data, $message, Response::HTTP_CREATED);
     }
@@ -53,17 +53,17 @@ trait ApiResponse
         return response()->json($response, $code);
     }
 
-    protected function notFound(string $message = 'Resource not found'): JsonResponse
+    protected function notFound(string $message = 'Recurso no encontrado'): JsonResponse
     {
         return $this->error($message, Response::HTTP_NOT_FOUND);
     }
 
-    protected function unauthorized(string $message = 'Unauthorized'): JsonResponse
+    protected function unauthorized(string $message = 'No autorizado'): JsonResponse
     {
         return $this->error($message, Response::HTTP_UNAUTHORIZED);
     }
 
-    protected function forbidden(string $message = 'Forbidden'): JsonResponse
+    protected function forbidden(string $message = 'Prohibido'): JsonResponse
     {
         return $this->error($message, Response::HTTP_FORBIDDEN);
     }
@@ -71,7 +71,7 @@ trait ApiResponse
     /**
      * @param  array<string, mixed>  $errors
      */
-    protected function validationError(array $errors, string $message = 'Validation failed'): JsonResponse
+    protected function validationError(array $errors, string $message = 'Error de validación'): JsonResponse
     {
         return $this->error($message, Response::HTTP_UNPROCESSABLE_ENTITY, $errors);
     }
