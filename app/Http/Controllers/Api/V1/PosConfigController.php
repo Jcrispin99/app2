@@ -60,7 +60,7 @@ final class PosConfigController extends Controller
 
         // Default to current tenant's company if none specified directly
         if (! isset($validated['company_id'])) {
-            $validated['company_id'] = auth()->user()?->company_id ?? 1;
+            $validated['company_id'] = $request->user()?->company_id ?? 1;
         }
 
         // Translate the simple array input array into what Eloquent sync() needs

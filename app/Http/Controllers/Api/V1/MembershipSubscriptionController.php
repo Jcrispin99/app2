@@ -12,6 +12,7 @@ use App\Models\MembershipSubscription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 final class MembershipSubscriptionController extends Controller
 {
@@ -90,7 +91,7 @@ final class MembershipSubscriptionController extends Controller
             'entries_used' => 0,
             'entries_this_month' => 0,
             'total_days_frozen' => 0,
-            'sold_by' => auth()->id(), // Associate to whoever is doing the API call
+            'sold_by' => Auth::id(),
         ]);
 
         $subscription = MembershipSubscription::create($subscriptionData);

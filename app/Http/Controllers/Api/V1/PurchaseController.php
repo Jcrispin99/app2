@@ -187,8 +187,9 @@ final class PurchaseController extends Controller
             $serie = 'F001';
             $correlative = '0000001';
 
-            if (class_exists(SequenceService::class)) {
-                $numberParts = SequenceService::getNextParts($defaultJournal->id);
+            $sequenceClass = '\\App\\Services\\SequenceService';
+            if (class_exists($sequenceClass)) {
+                $numberParts = $sequenceClass::getNextParts($defaultJournal->id);
                 $serie = $numberParts['serie'];
                 $correlative = $numberParts['correlative'];
             }

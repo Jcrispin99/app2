@@ -55,7 +55,7 @@ final class PosSessionController extends Controller
     public function open(PosSessionRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $userId = auth()->id() ?? 1; // Fallback for tinker testing if needed
+        $userId = $request->user()?->id ?? 1;
         $posConfigId = $validated['pos_config_id'];
 
         // 1. Check if this specific Terminal is already opened by someone else
@@ -116,7 +116,7 @@ final class PosSessionController extends Controller
         }
 
         // In a strict ERP, only the cashiers or admins can close their own boxes
-        if ($posSession->user_id !== (auth()->id() ?? 1) && ! auth()->user()?->hasRole('admin')) {
+        if ($posSession->user_id !== ($request->user()?->id ?? 1) && ! $request->user()?->hasRole('admin')) {
             return response()->json([
                 'message' => 'Solo el titular o un administrador puede cerrar esta caja.',
             ], 403);
