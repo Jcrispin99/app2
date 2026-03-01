@@ -20,6 +20,7 @@ final class WarehouseRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
+            'is_active' => ['boolean'],
             'location' => ['nullable', 'string', 'max:255'],
             'company_id' => ['nullable', 'exists:companies,id'],
         ];

@@ -21,6 +21,7 @@ final class WarehouseResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'is_active' => $this->is_active,
             'location' => $this->location,
             'company_id' => $this->company_id,
             'company' => new CompanyResource($this->whenLoaded('company')),
